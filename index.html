@@ -3,17 +3,17 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>AngulismoTV</title>
+<title>AngulismoTV - Portal Deportivo Retro</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Press+Start+2P&display=swap" rel="stylesheet">
 <link rel="shortcut icon" href="assets/logo.png" type="image/x-icon">
 
 <style>
-  /* === ESTILO RETRO GALÁCTICO === */
+  /* === VARIABLES Y RESET === */
   :root {
     --bg-dark: #000010;
-    --bg-card: rgba(0, 10, 40, 0.7);
+    --bg-card: rgba(0, 10, 40, 0.85);
     --text-primary: #ffffff;
     --text-secondary: #00eaff;
     --accent: #00ffff;
@@ -24,9 +24,9 @@
   }
 
   * {
-    box-sizing:border-box;
-    margin:0;
-    padding:0;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
     cursor: url('https://cur.cursors-4u.net/games/gam-14/gam1361.cur'), auto;
     -webkit-tap-highlight-color: transparent;
   }
@@ -38,183 +38,508 @@
     font-family: 'Orbitron', sans-serif;
     overflow-x: hidden;
     position: relative;
+    line-height: 1.6;
   }
 
-  /* Fondo de estrellas mejorado */
+  /* === STARFIELD ANIMADO === */
+  #starfield {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    pointer-events: none;
+    overflow: hidden;
+  }
+
   #starfield .star {
+    position: absolute;
     background: linear-gradient(45deg, #00ffff, #ff00ff);
+    border-radius: 50%;
     box-shadow: 0 0 6px #00ffffaa;
     opacity: 0.8;
     animation: twinkle 2.5s infinite alternate ease-in-out;
-  }
-  @keyframes twinkle {
-    0%, 100% { opacity: 0.3; transform: scale(1); }
-    50% { opacity: 1; transform: scale(1.2); }
+    will-change: opacity, transform;
   }
 
-  /* HEADER brillante */
+  @keyframes twinkle {
+    0%, 100% { 
+      opacity: 0.3; 
+      transform: scale(1); 
+    }
+    50% { 
+      opacity: 1; 
+      transform: scale(1.2); 
+    }
+  }
+
+  /* === HEADER === */
   header {
-    background: rgba(0,0,30,0.9);
+    background: rgba(0,0,30,0.95);
     border-bottom: 2px solid var(--accent);
-    box-shadow: 0 0 25px var(--accent);
+    box-shadow: 0 0 25px rgba(0,255,255,0.5);
     padding: 14px 5%;
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    position:sticky;
-    top:0;
-    z-index:1000;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
     text-transform: uppercase;
     font-family: 'Press Start 2P', cursive;
+    backdrop-filter: blur(10px);
   }
 
   .logo {
-    height:50px;
+    height: 50px;
     filter: drop-shadow(0 0 8px var(--accent));
     transition: var(--transition);
   }
+
   .logo:hover {
-    transform: scale(1.1);
+    transform: scale(1.1) rotate(2deg);
     filter: drop-shadow(0 0 16px var(--accent-purple));
   }
 
-  nav { display:flex; gap:12px; flex-wrap: wrap; }
+  nav {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
   nav a {
     background: rgba(0,0,40,0.7);
     border: 2px solid var(--accent);
     color: var(--text-secondary);
-    padding: 8px 12px;
+    padding: 8px 14px;
     text-decoration: none;
     font-size: 0.7rem;
     border-radius: 8px;
     transition: var(--transition);
     text-shadow: 0 0 4px var(--accent);
+    position: relative;
+    overflow: hidden;
   }
+
+  nav a::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(0,255,255,0.3), transparent);
+    transition: left 0.5s;
+  }
+
+  nav a:hover::before {
+    left: 100%;
+  }
+
   nav a:hover {
     background: var(--accent);
     color: #000;
-    box-shadow: 0 0 15px var(--accent);
+    box-shadow: 0 0 20px var(--accent);
+    transform: translateY(-2px);
   }
 
+  /* === CONTAINER === */
   .container {
     width: 100%;
+    max-width: 1400px;
     margin: 0 auto;
     padding: 1rem;
     position: relative;
     z-index: 2;
   }
 
-  main h4 {
-    font-size: 0.85rem;
-    color: #00ffff;
-    background: rgba(0,0,50,0.5);
-    border: 2px ridge var(--accent);
-    padding: 0.75rem;
-    border-radius: 8px;
-    margin: 1rem auto;
-    max-width: 900px;
-    text-shadow: 0 0 4px var(--accent);
+  main {
+    padding: 1rem 0;
   }
-  main h4 a {
+
+  /* === ALERT MESSAGE === */
+  .alert-message {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    background: linear-gradient(135deg, rgba(0,10,40,0.9), rgba(20,0,40,0.9));
+    border: 2px solid var(--accent);
+    padding: 1rem 1.25rem;
+    border-radius: var(--radius);
+    margin: 1.5rem auto;
+    max-width: 1000px;
+    text-shadow: 0 0 4px var(--accent);
+    box-shadow: 0 0 20px rgba(0,255,255,0.3);
+    line-height: 1.8;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .alert-message::before {
+    content: '💾';
+    font-size: 2rem;
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    opacity: 0.2;
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { 
+      transform: scale(1); 
+      opacity: 0.2; 
+    }
+    50% { 
+      transform: scale(1.1); 
+      opacity: 0.4; 
+    }
+  }
+
+  .alert-message a {
     color: var(--accent-purple);
+    text-decoration: none;
+    font-weight: 700;
+    text-shadow: 0 0 6px var(--accent-purple);
+    transition: var(--transition);
+  }
+
+  .alert-message a:hover {
+    color: var(--accent);
     text-decoration: underline;
+    text-shadow: 0 0 10px var(--accent);
+  }
+
+  /* === IFRAME AGENDA === */
+  .agenda-container {
+    margin: 2rem 0;
   }
 
   iframe#agendaFrame {
     width: 100%;
-    height: 500px;
+    height: 550px;
     border: 3px solid var(--accent);
     border-radius: var(--radius);
-    background: rgba(0,0,0,0.7);
-    box-shadow: 0 0 20px var(--accent);
-    margin-top: 1rem;
+    background: rgba(0,0,0,0.8);
+    box-shadow: 0 0 30px rgba(0,255,255,0.4);
+    transition: var(--transition);
   }
 
-  /* Canales */
+  iframe#agendaFrame:hover {
+    box-shadow: 0 0 40px rgba(255,0,255,0.6);
+    transform: translateY(-3px);
+  }
+
+  /* === SECTION TITLE === */
   .section-title {
-    font-size: 1.1rem;
-    text-align:center;
+    font-size: 1.3rem;
+    text-align: center;
     color: #fff;
     text-shadow: 0 0 10px var(--accent), 0 0 20px var(--accent-purple);
-    margin: 2rem 0 1rem;
+    margin: 3rem 0 1.5rem;
     font-family: 'Press Start 2P', cursive;
+    animation: flicker 2.5s infinite alternate;
+    letter-spacing: 2px;
+    position: relative;
+    padding: 1rem 0;
   }
 
-  .channels-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-    gap: 1rem;
+  .section-title::before,
+  .section-title::after {
+    content: '⚡';
+    position: absolute;
+    font-size: 1.5rem;
+    animation: float 3s ease-in-out infinite;
   }
 
-  .channel-card {
-    background: linear-gradient(135deg, rgba(0,0,40,0.8), rgba(20,0,40,0.8));
-    border: 2px solid #00ffffaa;
-    border-radius: 12px;
-    text-align:center;
-    padding: 0.75rem;
-    transition: 0.3s;
-    box-shadow: 0 0 10px #00ffff55;
-  }
-  .channel-card:hover {
-    transform: scale(1.05);
-    box-shadow: 0 0 25px #ff00ff;
-    border-color: #ff00ff;
-  }
-  .channel-card img {
-    width: 70px;
-    height: 70px;
-    border-radius: 50%;
-    border: 2px solid #ff00ff;
-    margin-bottom: 8px;
-  }
-  .channel-card span {
-    color: #00ffff;
-    font-size: 0.8rem;
-    text-shadow: 0 0 5px #00ffff;
+  .section-title::before {
+    left: 10%;
+    animation-delay: 0s;
   }
 
-  /* Footer */
-  footer.site-footer {
-    background: rgba(0,0,30,0.9);
-    border-top: 2px solid var(--accent);
-    padding: 1.5rem 0;
-    box-shadow: 0 0 20px var(--accent);
-  }
-  footer.site-footer small {
-    color: var(--accent);
-    display:block;
-    text-shadow: 0 0 5px var(--accent-purple);
-  }
-  footer.site-footer a {
-    color: var(--accent-purple);
-    text-decoration: none;
-  }
-  footer.site-footer a:hover {
-    text-decoration: underline;
-    text-shadow: 0 0 6px var(--accent);
+  .section-title::after {
+    right: 10%;
+    animation-delay: 1.5s;
   }
 
-  /* Animación de texto retro */
+  @keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+  }
+
   @keyframes flicker {
     0%, 18%, 22%, 25%, 53%, 57%, 100% {
       opacity: 1;
       text-shadow: 0 0 4px #00ffff, 0 0 10px #00ffff, 0 0 20px #ff00ff;
     }
     20%, 24%, 55% {
-      opacity: 0.4;
-      text-shadow: none;
+      opacity: 0.7;
+      text-shadow: 0 0 2px #00ffff;
     }
   }
-  h3.section-title {
-    animation: flicker 2.5s infinite alternate;
+
+  /* === CHANNELS GRID === */
+  .channels-section {
+    margin: 2rem 0;
   }
 
-  /* Responsive */
+  .channels-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 1.25rem;
+    padding: 1rem 0;
+  }
+
+  .channel-card {
+    background: linear-gradient(135deg, rgba(0,0,40,0.9), rgba(20,0,40,0.9));
+    border: 2px solid #00ffffaa;
+    border-radius: var(--radius);
+    text-align: center;
+    padding: 1rem;
+    transition: all 0.4s cubic-bezier(0.4,0,0.2,1);
+    box-shadow: 0 0 15px rgba(0,255,255,0.3);
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+  }
+
+  .channel-card::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(0,255,255,0.1) 0%, transparent 70%);
+    transform: scale(0);
+    transition: transform 0.6s;
+  }
+
+  .channel-card:hover::before {
+    transform: scale(1);
+  }
+
+  .channel-card:hover {
+    transform: translateY(-8px) scale(1.05);
+    box-shadow: 0 0 35px var(--accent-purple);
+    border-color: var(--accent-purple);
+  }
+
+  .channel-card img {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    border: 3px solid var(--accent-purple);
+    margin-bottom: 10px;
+    transition: var(--transition);
+    box-shadow: 0 0 15px rgba(255,0,255,0.5);
+  }
+
+  .channel-card:hover img {
+    transform: rotate(360deg) scale(1.1);
+    border-color: var(--accent);
+    box-shadow: 0 0 25px var(--accent);
+  }
+
+  .channel-card span {
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-shadow: 0 0 6px var(--accent);
+    display: block;
+    margin-top: 0.5rem;
+  }
+
+  /* === FOOTER === */
+  footer.site-footer {
+    background: rgba(0,0,30,0.95);
+    border-top: 2px solid var(--accent);
+    padding: 2rem 0;
+    box-shadow: 0 0 30px rgba(0,255,255,0.4);
+    text-align: center;
+    margin-top: 4rem;
+    position: relative;
+    z-index: 2;
+  }
+
+  footer.site-footer::before {
+    content: '';
+    position: absolute;
+    top: -50px;
+    left: 0;
+    right: 0;
+    height: 50px;
+    background: linear-gradient(to top, rgba(0,0,30,0.95), transparent);
+  }
+
+  footer.site-footer .container {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  footer.site-footer small {
+    color: var(--accent);
+    display: block;
+    text-shadow: 0 0 5px var(--accent-purple);
+    font-size: 0.85rem;
+    letter-spacing: 1px;
+  }
+
+  footer.site-footer a {
+    color: var(--accent-purple);
+    text-decoration: none;
+    font-weight: 600;
+    transition: var(--transition);
+    position: relative;
+  }
+
+  footer.site-footer a::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: var(--accent);
+    transition: width 0.3s;
+  }
+
+  footer.site-footer a:hover::after {
+    width: 100%;
+  }
+
+  footer.site-footer a:hover {
+    color: var(--accent);
+    text-shadow: 0 0 10px var(--accent);
+  }
+
+  /* === LOADING STATE === */
+  .loading-spinner {
+    display: inline-block;
+    width: 40px;
+    height: 40px;
+    border: 4px solid rgba(0,255,255,0.3);
+    border-top-color: var(--accent);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: 2rem auto;
+  }
+
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+
+  /* === SCROLLBAR === */
+  ::-webkit-scrollbar {
+    width: 12px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: rgba(0,0,20,0.8);
+    border-left: 1px solid var(--border-color);
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, var(--accent), var(--accent-purple));
+    border-radius: 6px;
+    box-shadow: 0 0 10px var(--accent);
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(180deg, var(--accent-purple), var(--accent));
+  }
+
+  /* === RESPONSIVE === */
+  @media (max-width: 768px) {
+    .channels-grid {
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 1rem;
+    }
+
+    .section-title {
+      font-size: 1rem;
+      margin: 2rem 0 1rem;
+    }
+
+    .section-title::before,
+    .section-title::after {
+      font-size: 1.2rem;
+    }
+  }
+
   @media (max-width: 480px) {
-    header { flex-direction: column; gap: 10px; }
-    nav { justify-content: center; }
-    nav a { font-size: 0.6rem; padding: 6px 10px; }
-    iframe#agendaFrame { height: 400px; }
+    header {
+      flex-direction: column;
+      gap: 12px;
+      padding: 12px 4%;
+    }
+
+    nav {
+      justify-content: center;
+      gap: 8px;
+    }
+
+    nav a {
+      font-size: 0.6rem;
+      padding: 6px 10px;
+    }
+
+    .logo {
+      height: 45px;
+    }
+
+    .alert-message {
+      font-size: 0.8rem;
+      padding: 0.9rem 1rem;
+      margin: 1rem auto;
+    }
+
+    iframe#agendaFrame {
+      height: 400px;
+    }
+
+    .channels-grid {
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 0.875rem;
+    }
+
+    .channel-card {
+      padding: 0.75rem;
+    }
+
+    .channel-card img {
+      width: 65px;
+      height: 65px;
+    }
+
+    .channel-card span {
+      font-size: 0.75rem;
+    }
+
+    .section-title {
+      font-size: 0.85rem;
+      letter-spacing: 1px;
+    }
+
+    footer.site-footer {
+      padding: 1.5rem 0;
+    }
+
+    footer.site-footer small {
+      font-size: 0.75rem;
+    }
+  }
+
+  @media (max-width: 360px) {
+    .channels-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    nav a {
+      font-size: 0.55rem;
+      padding: 5px 8px;
+    }
   }
 </style>
 </head>
@@ -223,20 +548,29 @@
 <div id="starfield"></div>
 
 <header>
-  <a href="index.html"><img src="assets/logo2.png" alt="AngulismoTV" class="logo"></a>
+  <a href="index.html" aria-label="AngulismoTV Home">
+    <img src="assets/logo2.png" alt="AngulismoTV" class="logo">
+  </a>
   <nav>
     <a href="index.html#channelsSection">Canales</a>
     <a href="index.html">Agenda</a>
     <a href="multicam.html">Pantalla Dividida</a>
-    <a href="https://nowevents.xyz" target="_blank">Entretenimiento</a>
-    <a href="https://nowstats.netlify.app" target="_blank">Estadisticas (beta)</a>
+    <a href="https://nowevents.xyz" target="_blank" rel="noopener">Entretenimiento</a>
+    <a href="https://nowstats.netlify.app" target="_blank" rel="noopener">Estadísticas (beta)</a>
   </nav>
 </header>
 
 <main class="container">
-  <h4>💾 El contenido de la plataforma puede incluir anuncios o pop-ups externos. Recomendamos <a href="https://ublockorigin.com/" target="_blank">uBlock Origin</a> para una experiencia sin interrupciones. También podés <a href="https://github.com/angulismotv-source/angulismotv-app/releases/tag/apk" target="_blank">descargar la app Android</a>. 🚀</h4>
+  <div class="alert-message">
+    💾 El contenido de la plataforma puede incluir anuncios o pop-ups externos. Recomendamos 
+    <a href="https://ublockorigin.com/" target="_blank" rel="noopener">uBlock Origin</a> 
+    para una experiencia sin interrupciones. También podés 
+    <a href="https://github.com/angulismotv-source/angulismotv-app/releases/tag/apk" target="_blank" rel="noopener">descargar la app Android</a>. 🚀
+  </div>
 
-  <iframe src="agenda.html" id="agendaFrame" title="Agenda Deportiva"></iframe>
+  <div class="agenda-container">
+    <iframe src="agenda.html" id="agendaFrame" title="Agenda Deportiva" loading="lazy"></iframe>
+  </div>
 
   <section id="channelsSection" class="channels-section">
     <h3 class="section-title">🌠 Canales Disponibles 🌠</h3>
@@ -248,27 +582,53 @@
 
 <footer class="site-footer">
   <div class="container">
-    <small>© 2025 | <a href="dmca.html">DMCA</a></small>
-    <small><a href="https://x.com/AngulismoTV">Twitter</a> | <a href="https://discord.gg/jEayDA7T">Discord</a></small>
+    <small>© 2025 AngulismoTV | <a href="dmca.html">DMCA</a></small>
+    <small>
+      <a href="https://x.com/AngulismoTV" target="_blank" rel="noopener">Twitter</a> | 
+      <a href="https://discord.gg/jEayDA7T" target="_blank" rel="noopener">Discord</a>
+    </small>
   </div>
 </footer>
 
 <script defer src="scripts/main.js"></script>
 
 <script>
-  // Mantiene tu script de estrellas intacto
-  const starfield = document.getElementById('starfield');
-  const numStars = 80;
-  for(let i=0;i<numStars;i++){
-    const star = document.createElement('div');
-    star.className='star';
-    const size = Math.random()*2+1;
-    star.style.width = star.style.height = size+'px';
-    star.style.top = Math.random()*100+'%';
-    star.style.left = Math.random()*100+'%';
-    star.style.animationDelay = Math.random()*3+'s';
-    starfield.appendChild(star);
-  }
+  // === STARFIELD GENERATOR ===
+  (function() {
+    const starfield = document.getElementById('starfield');
+    const numStars = 80;
+    const fragment = document.createDocumentFragment();
+    
+    for(let i = 0; i < numStars; i++) {
+      const star = document.createElement('div');
+      star.className = 'star';
+      const size = Math.random() * 2 + 1;
+      star.style.width = star.style.height = size + 'px';
+      star.style.top = Math.random() * 100 + '%';
+      star.style.left = Math.random() * 100 + '%';
+      star.style.animationDelay = Math.random() * 3 + 's';
+      fragment.appendChild(star);
+    }
+    
+    starfield.appendChild(fragment);
+  })();
+
+  // === SMOOTH SCROLL ===
+  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+      const href = this.getAttribute('href');
+      if (href !== '#' && href.includes('#')) {
+        e.preventDefault();
+        const target = document.querySelector(href.split('#')[1] ? '#' + href.split('#')[1] : href);
+        if (target) {
+          target.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+          });
+        }
+      }
+    });
+  });
 </script>
 
 </body>
