@@ -1,0 +1,244 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Agenda Deportiva - AngulismoTV</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-dark: #050510;
+      --bg-card: rgba(15, 15, 35, 0.85);
+      --text-primary: #ffffff;
+      --text-secondary: #72d6ff;
+      --accent: #00ffff;
+      --accent-purple: #ff00ff;
+      --border-color: rgba(255,255,255,0.15);
+      --radius: 12px;
+      --transition: 0.3s ease;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
+      cursor: url('https://cur.cursors-4u.net/cursors/cur-2/cur116.cur'), auto;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background: radial-gradient(circle at center, #06061a 0%, #000010 100%);
+      color: var(--text-primary);
+      overflow-x: hidden;
+      position: relative;
+      min-height: 100vh;
+      animation: fadeIn 1s ease-in;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    /* Fondo de estrellas */
+    #starfield {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      overflow: hidden;
+      pointer-events: none;
+    }
+    .star {
+      position: absolute;
+      background: white;
+      border-radius: 50%;
+      opacity: 0.8;
+      animation: twinkle 3s infinite linear;
+    }
+    @keyframes twinkle {
+      0%,100% { opacity: 0.3; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.5); }
+    }
+
+    /* Glitch banner */
+    .day-banner {
+      background: linear-gradient(135deg, rgba(0,255,255,0.2), rgba(255,0,255,0.2));
+      border: 1px solid var(--accent);
+      color: var(--text-secondary);
+      border-radius: var(--radius);
+      padding: 1rem 1.5rem;
+      font-size: 1.3rem;
+      font-weight: 700;
+      text-align: center;
+      font-family: 'Orbitron', sans-serif;
+      box-shadow: 0 0 12px rgba(0,255,255,0.4), inset 0 0 8px rgba(255,0,255,0.2);
+      backdrop-filter: blur(8px);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .day-banner::after {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: repeating-linear-gradient(
+        to bottom,
+        rgba(255,255,255,0.02) 0,
+        rgba(255,255,255,0.02) 2px,
+        transparent 2px,
+        transparent 4px
+      );
+      mix-blend-mode: overlay;
+      animation: scanline 3s linear infinite;
+    }
+
+    @keyframes scanline {
+      0% { transform: translateY(-100%); }
+      100% { transform: translateY(100%); }
+    }
+
+    .container-agenda {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem 1rem;
+      position: relative;
+      z-index: 2;
+    }
+
+    .agenda {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    /* Tarjetas */
+    .match-card {
+      background: var(--bg-card);
+      border-radius: var(--radius);
+      padding: 1rem 1.25rem;
+      border: 1px solid var(--border-color);
+      box-shadow: 0 0 12px rgba(0,255,255,0.2);
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      backdrop-filter: blur(8px);
+      transition: transform 0.2s ease, box-shadow 0.3s ease;
+      position: relative;
+    }
+
+    .match-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(0,255,255,0.05), rgba(255,0,255,0.05));
+      opacity: 0;
+      transition: opacity 0.3s;
+      border-radius: var(--radius);
+    }
+
+    .match-card:hover::before {
+      opacity: 1;
+    }
+
+    .match-card:hover {
+      transform: translateY(-3px) scale(1.01);
+      box-shadow: 0 0 20px rgba(255,0,255,0.3), 0 0 30px rgba(0,255,255,0.2);
+    }
+
+    .time-badge {
+      background: rgba(0,255,255,0.1);
+      border: 1px solid rgba(0,255,255,0.5);
+      color: var(--accent);
+      font-weight: 700;
+      padding: 0.5rem 0.875rem;
+      border-radius: 8px;
+      text-shadow: 0 0 6px #00ffff;
+      min-width: 70px;
+      text-align: center;
+      font-family: 'Orbitron', sans-serif;
+    }
+
+    .teams {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #fff;
+      text-shadow: 0 0 6px rgba(255,255,255,0.3);
+    }
+
+    .meta span {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+    }
+
+    .channel-item {
+      transition: background 0.3s ease, transform 0.2s ease;
+    }
+
+    .channel-item:hover {
+      background: rgba(0,255,255,0.1);
+      transform: scale(1.03);
+    }
+
+    .no-events {
+      text-align: center;
+      padding: 3rem 1rem;
+      color: var(--accent);
+      font-size: 1.1rem;
+      font-family: 'Orbitron', sans-serif;
+      text-shadow: 0 0 10px rgba(0,255,255,0.4);
+    }
+
+    /* Animación de carga retro */
+    .loading {
+      background: linear-gradient(90deg, rgba(0,255,255,0.1) 25%, rgba(255,0,255,0.1) 50%, rgba(0,255,255,0.1) 75%);
+      background-size: 200% 100%;
+      animation: loading 1.5s infinite linear;
+    }
+
+    @keyframes loading {
+      0% { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .match-card {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="starfield"></div>
+
+  <main class="container-agenda">
+    <section class="intro">
+      <div id="dayBanner" class="day-banner"></div>
+    </section>
+    <section id="agenda" class="agenda compact"></section>
+  </main>
+
+  <script defer src="scripts/main.js"></script>
+  
+  <script>
+    // Fondo estrellado dinámico
+    const starfield = document.getElementById('starfield');
+    const numStars = 80;
+    for (let i = 0; i < numStars; i++) {
+      const star = document.createElement('div');
+      star.className = 'star';
+      const size = Math.random() * 2 + 1;
+      star.style.width = star.style.height = size + 'px';
+      star.style.top = Math.random() * 100 + '%';
+      star.style.left = Math.random() * 100 + '%';
+      star.style.animationDelay = Math.random() * 3 + 's';
+      starfield.appendChild(star);
+    }
+  </script>
+</body>
+</html>

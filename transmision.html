@@ -1,0 +1,263 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Transmisión en Vivo - AngulismoTV</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Press+Start+2P&display=swap" rel="stylesheet">
+<link rel="shortcut icon" href="assets/logo.png" type="image/x-icon">
+
+<style>
+:root {
+  --bg-dark:#000010;
+  --bg-card: rgba(0,10,40,0.7);
+  --text-primary:#fff;
+  --text-secondary:#00eaff;
+  --accent:#00ffff;
+  --accent-purple:#ff00ff;
+  --border-color: rgba(255,255,255,0.2);
+  --radius:12px;
+  --transition:0.3s cubic-bezier(0.4,0,0.2,1);
+}
+
+* {
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+  cursor: url('https://cur.cursors-4u.net/games/gam-14/gam1361.cur'), auto;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  min-height:100vh;
+  background: url('https://i.gifer.com/3fFv.gif') center/cover fixed, radial-gradient(circle at top, #020220,#000010);
+  color: var(--text-primary);
+  font-family:'Orbitron', sans-serif;
+  overflow-x:hidden;
+  position:relative;
+}
+
+#starfield .star {
+  background: linear-gradient(45deg,#00ffff,#ff00ff);
+  box-shadow:0 0 6px #00ffffaa;
+  opacity:0.8;
+  animation: twinkle 2.5s infinite alternate ease-in-out;
+}
+@keyframes twinkle {
+  0%,100%{opacity:0.3; transform:scale(1);}
+  50%{opacity:1; transform:scale(1.2);}
+}
+
+/* HEADER */
+header {
+  background: rgba(0,0,30,0.9);
+  border-bottom: 2px solid var(--accent);
+  box-shadow:0 0 25px var(--accent);
+  padding:14px 5%;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  position:sticky;
+  top:0;
+  z-index:1000;
+  text-transform:uppercase;
+  font-family:'Press Start 2P', cursive;
+}
+
+.logo {
+  height:50px;
+  filter: drop-shadow(0 0 8px var(--accent));
+  transition: var(--transition);
+}
+.logo:hover {
+  transform: scale(1.1);
+  filter: drop-shadow(0 0 16px var(--accent-purple));
+}
+
+nav { display:flex; gap:12px; flex-wrap:wrap; }
+nav a {
+  background: rgba(0,0,40,0.7);
+  border:2px solid var(--accent);
+  color: var(--text-secondary);
+  padding:8px 12px;
+  text-decoration:none;
+  font-size:0.7rem;
+  border-radius:8px;
+  transition: var(--transition);
+  text-shadow:0 0 4px var(--accent);
+}
+nav a:hover {
+  background: var(--accent);
+  color:#000;
+  box-shadow:0 0 15px var(--accent);
+}
+
+.options-bar {
+  display:flex;
+  gap:12px;
+  padding:12px 5%;
+  background: rgba(0,0,40,0.7);
+  border-bottom:2px solid var(--accent);
+  border-radius:var(--radius);
+  margin:1rem 5%;
+}
+
+select,.btn {
+  padding:10px;
+  border-radius:8px;
+  border:2px solid var(--accent);
+  background: var(--bg-card);
+  color:var(--text-secondary);
+  font-weight:700;
+  cursor:pointer;
+  transition: var(--transition);
+}
+.btn:hover, select:hover { background: var(--accent); color:#000; }
+
+.container {
+  width:100%;
+  margin:0 auto;
+  padding:1rem 5%;
+  display:grid;
+  grid-template-columns:3fr 1fr;
+  gap:20px;
+  position:relative;
+  z-index:2;
+}
+
+.card {
+  background: var(--bg-card);
+  border-radius: var(--radius);
+  overflow:hidden;
+  box-shadow:0 0 15px var(--accent);
+  display:flex;
+  flex-direction:column;
+  transition: transform 0.2s ease, box-shadow 0.3s ease;
+  position:relative;
+}
+.card:hover { transform:scale(1.02); box-shadow:0 0 25px var(--accent),0 0 35px var(--accent-purple); }
+
+.card::before {
+  content:"";
+  position:absolute;
+  top:0; left:0; width:100%; height:100%;
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(255,255,255,0.02),
+    rgba(255,255,255,0.02) 1px,
+    transparent 1px,
+    transparent 2px
+  );
+  pointer-events:none;
+  mix-blend-mode: overlay;
+  z-index:2;
+}
+
+.card-header {
+  background: rgba(0,0,50,0.6);
+  padding:12px;
+  border-bottom:2px solid var(--accent);
+  display:flex;
+  align-items:center;
+  gap:12px;
+  z-index:3;
+}
+
+.channel-head img {
+  width:44px;
+  height:44px;
+  border-radius:50%;
+  border:2px solid var(--accent);
+  transition: var(--transition);
+}
+.channel-head img:hover { transform:scale(1.05); border-color:var(--accent-purple); }
+
+.channel-head .name { color: var(--accent); font-weight:700; font-family:'Press Start 2P', cursive; }
+
+iframe {
+  width:100%;
+  min-height:400px;
+  border:2px solid var(--accent);
+  border-radius: var(--radius);
+  background:rgba(0,0,0,0.7);
+  box-shadow:0 0 20px var(--accent),0 0 30px var(--accent-purple);
+  position:relative;
+}
+
+footer.site-footer {
+  background: rgba(0,0,30,0.9);
+  border-top:2px solid var(--accent);
+  padding:1rem 5%;
+  text-align:center;
+  box-shadow:0 0 20px var(--accent);
+}
+footer.site-footer small { color: var(--accent); display:block; }
+footer.site-footer a { color: var(--accent-purple); text-decoration:none; }
+footer.site-footer a:hover { text-decoration:underline; text-shadow:0 0 6px var(--accent); }
+
+@media(max-width:768px){ .container{grid-template-columns:1fr; gap:15px;} iframe{min-height:300px;} }
+@media(max-width:480px){ header{flex-direction:column; gap:10px;} nav{justify-content:center;} iframe{min-height:250px;} }
+</style>
+</head>
+<body>
+<div id="starfield"></div>
+
+<header>
+  <a href="index.html"><img src="assets/logo2.png" alt="AngulismoTV" class="logo"></a>
+  <nav>
+    <a href="index.html#channelsSection">Canales</a>
+    <a href="index.html">Agenda</a>
+    <a href="multicam.html">Pantalla Dividida</a>
+    <a href="https://nowevents.xyz" target="_blank">Entretenimiento</a>
+    <a href="https://nowstats.netlify.app" target="_blank">Estadisticas (beta)</a>
+  </nav>
+</header>
+
+<section class="options-bar">
+  <label for="optionSelect">Transmisión:</label>
+  <select id="optionSelect"></select>
+  <button class="btn" id="reloadBtn">Recargar</button>
+</section>
+
+<main class="container">
+  <section class="card player-card">
+    <div class="card-header">
+      <div class="channel-head">
+        <img id="channel-logo" src="assets/logo2.png" alt="Canal">
+        <span class="name" id="channel-name">Canal en Vivo</span>
+      </div>
+    </div>
+    <iframe id="playerFrame" allowfullscreen referrerpolicy="no-referrer" title="Reproductor"></iframe>
+  </section>
+
+  <aside class="card chat-card">
+    <div class="card-header">
+      <span class="name">Chat en Vivo</span>
+    </div>
+    <iframe id="twitchChat" src="" title="Twitch Chat" referrerpolicy="no-referrer"></iframe>
+  </aside>
+</main>
+
+<footer class="site-footer">
+  <small>© 2025 | <a href="dmca.html">DMCA</a></small>
+  <small><a href="https://x.com/AngulismoTV">Twitter</a> | <a href="https://discord.gg/jEayDA7T">Discord</a></small>
+</footer>
+
+<script>
+const starfield=document.getElementById('starfield');
+for(let i=0;i<80;i++){
+  const star=document.createElement('div');
+  star.className='star';
+  const size=Math.random()*2+1;
+  star.style.width=star.style.height=size+'px';
+  star.style.top=Math.random()*100+'%';
+  star.style.left=Math.random()*100+'%';
+  star.style.animationDelay=Math.random()*3+'s';
+  starfield.appendChild(star);
+}
+</script>
+<script defer src="scripts/transmision.js"></script>
+</body>
+</html>

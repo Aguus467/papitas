@@ -1,23 +1,275 @@
-
-<!DOCTYPE html>
-<html>
+<!doctype html>
+<html lang="es">
 <head>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>Iniciador de sesion</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>AngulismoTV</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Press+Start+2P&display=swap" rel="stylesheet">
+<link rel="shortcut icon" href="assets/logo.png" type="image/x-icon">
+
+<style>
+  /* === ESTILO RETRO GALÁCTICO === */
+  :root {
+    --bg-dark: #000010;
+    --bg-card: rgba(0, 10, 40, 0.7);
+    --text-primary: #ffffff;
+    --text-secondary: #00eaff;
+    --accent: #00ffff;
+    --accent-purple: #ff00ff;
+    --border-color: rgba(255,255,255,0.2);
+    --radius: 12px;
+    --transition: 0.3s cubic-bezier(0.4,0,0.2,1);
+  }
+
+  * {
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+    cursor: url('https://cur.cursors-4u.net/games/gam-14/gam1361.cur'), auto;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  body {
+    min-height: 100vh;
+    background: url('https://i.gifer.com/3fFv.gif') center/cover fixed, radial-gradient(circle at top, #020220, #000010);
+    color: var(--text-primary);
+    font-family: 'Orbitron', sans-serif;
+    overflow-x: hidden;
+    position: relative;
+  }
+
+  /* Fondo de estrellas mejorado */
+  #starfield .star {
+    background: linear-gradient(45deg, #00ffff, #ff00ff);
+    box-shadow: 0 0 6px #00ffffaa;
+    opacity: 0.8;
+    animation: twinkle 2.5s infinite alternate ease-in-out;
+  }
+  @keyframes twinkle {
+    0%, 100% { opacity: 0.3; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.2); }
+  }
+
+  /* HEADER brillante */
+  header {
+    background: rgba(0,0,30,0.9);
+    border-bottom: 2px solid var(--accent);
+    box-shadow: 0 0 25px var(--accent);
+    padding: 14px 5%;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    position:sticky;
+    top:0;
+    z-index:1000;
+    text-transform: uppercase;
+    font-family: 'Press Start 2P', cursive;
+  }
+
+  .logo {
+    height:50px;
+    filter: drop-shadow(0 0 8px var(--accent));
+    transition: var(--transition);
+  }
+  .logo:hover {
+    transform: scale(1.1);
+    filter: drop-shadow(0 0 16px var(--accent-purple));
+  }
+
+  nav { display:flex; gap:12px; flex-wrap: wrap; }
+  nav a {
+    background: rgba(0,0,40,0.7);
+    border: 2px solid var(--accent);
+    color: var(--text-secondary);
+    padding: 8px 12px;
+    text-decoration: none;
+    font-size: 0.7rem;
+    border-radius: 8px;
+    transition: var(--transition);
+    text-shadow: 0 0 4px var(--accent);
+  }
+  nav a:hover {
+    background: var(--accent);
+    color: #000;
+    box-shadow: 0 0 15px var(--accent);
+  }
+
+  .container {
+    width: 100%;
+    margin: 0 auto;
+    padding: 1rem;
+    position: relative;
+    z-index: 2;
+  }
+
+  main h4 {
+    font-size: 0.85rem;
+    color: #00ffff;
+    background: rgba(0,0,50,0.5);
+    border: 2px ridge var(--accent);
+    padding: 0.75rem;
+    border-radius: 8px;
+    margin: 1rem auto;
+    max-width: 900px;
+    text-shadow: 0 0 4px var(--accent);
+  }
+  main h4 a {
+    color: var(--accent-purple);
+    text-decoration: underline;
+  }
+
+  iframe#agendaFrame {
+    width: 100%;
+    height: 500px;
+    border: 3px solid var(--accent);
+    border-radius: var(--radius);
+    background: rgba(0,0,0,0.7);
+    box-shadow: 0 0 20px var(--accent);
+    margin-top: 1rem;
+  }
+
+  /* Canales */
+  .section-title {
+    font-size: 1.1rem;
+    text-align:center;
+    color: #fff;
+    text-shadow: 0 0 10px var(--accent), 0 0 20px var(--accent-purple);
+    margin: 2rem 0 1rem;
+    font-family: 'Press Start 2P', cursive;
+  }
+
+  .channels-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1rem;
+  }
+
+  .channel-card {
+    background: linear-gradient(135deg, rgba(0,0,40,0.8), rgba(20,0,40,0.8));
+    border: 2px solid #00ffffaa;
+    border-radius: 12px;
+    text-align:center;
+    padding: 0.75rem;
+    transition: 0.3s;
+    box-shadow: 0 0 10px #00ffff55;
+  }
+  .channel-card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 25px #ff00ff;
+    border-color: #ff00ff;
+  }
+  .channel-card img {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    border: 2px solid #ff00ff;
+    margin-bottom: 8px;
+  }
+  .channel-card span {
+    color: #00ffff;
+    font-size: 0.8rem;
+    text-shadow: 0 0 5px #00ffff;
+  }
+
+  /* Footer */
+  footer.site-footer {
+    background: rgba(0,0,30,0.9);
+    border-top: 2px solid var(--accent);
+    padding: 1.5rem 0;
+    box-shadow: 0 0 20px var(--accent);
+  }
+  footer.site-footer small {
+    color: var(--accent);
+    display:block;
+    text-shadow: 0 0 5px var(--accent-purple);
+  }
+  footer.site-footer a {
+    color: var(--accent-purple);
+    text-decoration: none;
+  }
+  footer.site-footer a:hover {
+    text-decoration: underline;
+    text-shadow: 0 0 6px var(--accent);
+  }
+
+  /* Animación de texto retro */
+  @keyframes flicker {
+    0%, 18%, 22%, 25%, 53%, 57%, 100% {
+      opacity: 1;
+      text-shadow: 0 0 4px #00ffff, 0 0 10px #00ffff, 0 0 20px #ff00ff;
+    }
+    20%, 24%, 55% {
+      opacity: 0.4;
+      text-shadow: none;
+    }
+  }
+  h3.section-title {
+    animation: flicker 2.5s infinite alternate;
+  }
+
+  /* Responsive */
+  @media (max-width: 480px) {
+    header { flex-direction: column; gap: 10px; }
+    nav { justify-content: center; }
+    nav a { font-size: 0.6rem; padding: 6px 10px; }
+    iframe#agendaFrame { height: 400px; }
+  }
+</style>
 </head>
+
 <body>
-	<h1>
-		Hola, inicia sesion.
-	</h1>
-	<p>Usuario</p>
-	<input type="textbox" name="txtbox">
-	<p>Contraseña</p>
-	<input type="password" name="txtbox"><br><br>
-		
-	<form method="get" action="index2.html"> 
-		<input type="submit" name="btn" value="Iniciar Sesion">	
-	</form>
+<div id="starfield"></div>
+
+<header>
+  <a href="index.html"><img src="assets/logo2.png" alt="AngulismoTV" class="logo"></a>
+  <nav>
+    <a href="index.html#channelsSection">Canales</a>
+    <a href="index.html">Agenda</a>
+    <a href="multicam.html">Pantalla Dividida</a>
+    <a href="https://nowevents.xyz" target="_blank">Entretenimiento</a>
+    <a href="https://nowstats.netlify.app" target="_blank">Estadisticas (beta)</a>
+  </nav>
+</header>
+
+<main class="container">
+  <h4>💾 El contenido de la plataforma puede incluir anuncios o pop-ups externos. Recomendamos <a href="https://ublockorigin.com/" target="_blank">uBlock Origin</a> para una experiencia sin interrupciones. También podés <a href="https://github.com/angulismotv-source/angulismotv-app/releases/tag/apk" target="_blank">descargar la app Android</a>. 🚀</h4>
+
+  <iframe src="agenda.html" id="agendaFrame" title="Agenda Deportiva"></iframe>
+
+  <section id="channelsSection" class="channels-section">
+    <h3 class="section-title">🌠 Canales Disponibles 🌠</h3>
+    <div id="channelsGrid" class="channels-grid">
+      <!-- Canales generados por JS -->
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <small>© 2025 | <a href="dmca.html">DMCA</a></small>
+    <small><a href="https://x.com/AngulismoTV">Twitter</a> | <a href="https://discord.gg/jEayDA7T">Discord</a></small>
+  </div>
+</footer>
+
+<script defer src="scripts/main.js"></script>
+
+<script>
+  // Mantiene tu script de estrellas intacto
+  const starfield = document.getElementById('starfield');
+  const numStars = 80;
+  for(let i=0;i<numStars;i++){
+    const star = document.createElement('div');
+    star.className='star';
+    const size = Math.random()*2+1;
+    star.style.width = star.style.height = size+'px';
+    star.style.top = Math.random()*100+'%';
+    star.style.left = Math.random()*100+'%';
+    star.style.animationDelay = Math.random()*3+'s';
+    starfield.appendChild(star);
+  }
+</script>
 
 </body>
 </html>
