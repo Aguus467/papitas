@@ -2,262 +2,269 @@
 <html lang="es">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <title>Transmisión en Vivo - AngulismoTV</title>
+<link rel="shortcut icon" href="assets/logo.png" type="image/x-icon">
+<meta name="description" content="Disfruta de transmisiones en vivo de tus canales favoritos con experiencia personalizable">
+
+<!-- Meta tags optimizados -->
+<meta name="theme-color" content="#0b0d1b">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+<link rel="icon" href="assets/logo2.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Press+Start+2P&display=swap" rel="stylesheet">
-<link rel="shortcut icon" href="assets/logo.png" type="image/x-icon">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 
+<!-- CSS separados - ORDEN CORRECTO -->
+<link rel="stylesheet" href="css/espacial-base.css">
+<link rel="stylesheet" href="css/header-unificado.css">
+<link rel="stylesheet" href="css/transmision.css">
 <style>
-:root {
-  --bg-dark:#000010;
-  --bg-card: rgba(0,10,40,0.7);
-  --text-primary:#fff;
-  --text-secondary:#00eaff;
-  --accent:#00ffff;
-  --accent-purple:#ff00ff;
-  --border-color: rgba(255,255,255,0.2);
-  --radius:12px;
-  --transition:0.3s cubic-bezier(0.4,0,0.2,1);
-}
+  /* Reproductor flexible que se adapta al contenido embebido */
+  .player-card {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+  
+  #playerFrame {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 16 / 9;
+    border: none;
+    background: #000;
+    flex: 1;
+    overflow: hidden !important;
+  }
+  
+  .player-card iframe {
+    min-height: 0 !important;
+    flex-grow: 1 !important;
+    overflow: hidden !important;
+  }
+  
+  @media (max-width: 768px) {
+    #playerFrame { min-height: 300px; }
+  }
+  
+  @media (max-width: 480px) {
+    #playerFrame { min-height: 250px; }
+  }
 
-* {
-  box-sizing:border-box;
-  margin:0;
-  padding:0;
-  cursor: url('https://cur.cursors-4u.net/games/gam-14/gam1361.cur'), auto;
-  -webkit-tap-highlight-color: transparent;
-}
+  /* Loading state */
+  .loading { opacity: 0.5; pointer-events: none; }
 
-body {
-  min-height:100vh;
-  background: url('https://i.gifer.com/3fFv.gif') center/cover fixed, radial-gradient(circle at top, #020220,#000010);
-  color: var(--text-primary);
-  font-family:'Orbitron', sans-serif;
-  overflow-x:hidden;
-  position:relative;
-}
+  /* Spin animation */
+  @keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
 
-#starfield .star {
-  background: linear-gradient(45deg,#00ffff,#ff00ff);
-  box-shadow:0 0 6px #00ffffaa;
-  opacity:0.8;
-  animation: twinkle 2.5s infinite alternate ease-in-out;
-}
-@keyframes twinkle {
-  0%,100%{opacity:0.3; transform:scale(1);}
-  50%{opacity:1; transform:scale(1.2);}
-}
-
-/* HEADER */
-header {
-  background: rgba(0,0,30,0.9);
-  border-bottom: 2px solid var(--accent);
-  box-shadow:0 0 25px var(--accent);
-  padding:14px 5%;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  position:sticky;
-  top:0;
-  z-index:1000;
-  text-transform:uppercase;
-  font-family:'Press Start 2P', cursive;
-}
-
-.logo {
-  height:50px;
-  filter: drop-shadow(0 0 8px var(--accent));
-  transition: var(--transition);
-}
-.logo:hover {
-  transform: scale(1.1);
-  filter: drop-shadow(0 0 16px var(--accent-purple));
-}
-
-nav { display:flex; gap:12px; flex-wrap:wrap; }
-nav a {
-  background: rgba(0,0,40,0.7);
-  border:2px solid var(--accent);
-  color: var(--text-secondary);
-  padding:8px 12px;
-  text-decoration:none;
-  font-size:0.7rem;
-  border-radius:8px;
-  transition: var(--transition);
-  text-shadow:0 0 4px var(--accent);
-}
-nav a:hover {
-  background: var(--accent);
-  color:#000;
-  box-shadow:0 0 15px var(--accent);
-}
-
-.options-bar {
-  display:flex;
-  gap:12px;
-  padding:12px 5%;
-  background: rgba(0,0,40,0.7);
-  border-bottom:2px solid var(--accent);
-  border-radius:var(--radius);
-  margin:1rem 5%;
-}
-
-select,.btn {
-  padding:10px;
-  border-radius:8px;
-  border:2px solid var(--accent);
-  background: var(--bg-card);
-  color:var(--text-secondary);
-  font-weight:700;
-  cursor:pointer;
-  transition: var(--transition);
-}
-.btn:hover, select:hover { background: var(--accent); color:#000; }
-
-.container {
-  width:100%;
-  margin:0 auto;
-  padding:1rem 5%;
-  display:grid;
-  grid-template-columns:3fr 1fr;
-  gap:20px;
-  position:relative;
-  z-index:2;
-}
-
-.card {
-  background: var(--bg-card);
-  border-radius: var(--radius);
-  overflow:hidden;
-  box-shadow:0 0 15px var(--accent);
-  display:flex;
-  flex-direction:column;
-  transition: transform 0.2s ease, box-shadow 0.3s ease;
-  position:relative;
-}
-.card:hover { transform:scale(1.02); box-shadow:0 0 25px var(--accent),0 0 35px var(--accent-purple); }
-
-.card::before {
-  content:"";
-  position:absolute;
-  top:0; left:0; width:100%; height:100%;
-  background: repeating-linear-gradient(
-    0deg,
-    rgba(255,255,255,0.02),
-    rgba(255,255,255,0.02) 1px,
-    transparent 1px,
-    transparent 2px
-  );
-  pointer-events:none;
-  mix-blend-mode: overlay;
-  z-index:2;
-}
-
-.card-header {
-  background: rgba(0,0,50,0.6);
-  padding:12px;
-  border-bottom:2px solid var(--accent);
-  display:flex;
-  align-items:center;
-  gap:12px;
-  z-index:3;
-}
-
-.channel-head img {
-  width:44px;
-  height:44px;
-  border-radius:50%;
-  border:2px solid var(--accent);
-  transition: var(--transition);
-}
-.channel-head img:hover { transform:scale(1.05); border-color:var(--accent-purple); }
-
-.channel-head .name { color: var(--accent); font-weight:700; font-family:'Press Start 2P', cursive; }
-
-iframe {
-  width:100%;
-  min-height:400px;
-  border:2px solid var(--accent);
-  border-radius: var(--radius);
-  background:rgba(0,0,0,0.7);
-  box-shadow:0 0 20px var(--accent),0 0 30px var(--accent-purple);
-  position:relative;
-}
-
-footer.site-footer {
-  background: rgba(0,0,30,0.9);
-  border-top:2px solid var(--accent);
-  padding:1rem 5%;
-  text-align:center;
-  box-shadow:0 0 20px var(--accent);
-}
-footer.site-footer small { color: var(--accent); display:block; }
-footer.site-footer a { color: var(--accent-purple); text-decoration:none; }
-footer.site-footer a:hover { text-decoration:underline; text-shadow:0 0 6px var(--accent); }
-
-@media(max-width:768px){ .container{grid-template-columns:1fr; gap:15px;} iframe{min-height:300px;} }
-@media(max-width:480px){ header{flex-direction:column; gap:10px;} nav{justify-content:center;} iframe{min-height:250px;} }
+  .spinning { animation: spin 1s linear infinite; }
 </style>
+
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-P2V7GWXLHJ"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-P2V7GWXLHJ');
+</script>
 </head>
 <body>
-<div id="starfield"></div>
 
-<header>
-  <a href="index.html"><img src="assets/logo2.png" alt="AngulismoTV" class="logo"></a>
-  <nav>
+<!-- Starfield Background -->
+<div id="starfield">
+  <div class="spiral-galaxy"></div>
+  <div class="aurora aurora-1"></div>
+  <div class="aurora aurora-2"></div>
+</div>
+
+<!-- Header -->
+<header class="site-header">
+  <div class="logo-container">
+    <a href="index.html" aria-label="AngulismoTV - Inicio">
+      <img src="assets/logo2.png" alt="AngulismoTV" class="logo">
+    </a>
+  </div>
+  
+  <nav role="navigation" aria-label="Navegación principal">
     <a href="index.html#channelsSection">Canales</a>
     <a href="index.html">Agenda</a>
     <a href="multicam.html">Pantalla Dividida</a>
-    <a href="https://nowevents.xyz" target="_blank">Entretenimiento</a>
-    <a href="https://nowstats.netlify.app" target="_blank">Estadisticas (beta)</a>
+    <a href="https://nowevents.xyz">Entretenimiento</a>
+    <a href="https://nowstats.netlify.app">Estadísticas</a>
+    <a href="foro.html">Foro</a>
   </nav>
 </header>
 
+<!-- Options Bar -->
 <section class="options-bar">
   <label for="optionSelect">Transmisión:</label>
-  <select id="optionSelect"></select>
-  <button class="btn" id="reloadBtn">Recargar</button>
+  <select id="optionSelect" aria-label="Seleccionar transmisión">
+    <option value="">Cargando opciones...</option>
+  </select>
+  <button class="btn" id="reloadBtn" aria-label="Recargar transmisión">
+    <svg class="icon-reload" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.2"/>
+    </svg>
+    Recargar
+  </button>
+  <button class="btn customize-btn" id="customizeBtn" aria-label="Personalizar interfaz">
+    <svg class="icon-settings" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <circle cx="12" cy="12" r="3"/>
+      <path d="M12 1v6m0 6v6m6-12h-6m6 6h-6M4.22 4.22l4.24 4.24m5.08 5.08l4.24 4.24m-4.24-13.56l-4.24 4.24m-5.08 5.08l-4.24 4.24"/>
+    </svg>
+    Personalizar
+  </button>
 </section>
 
+<!-- Main Content -->
 <main class="container">
+  <!-- Player Card -->
   <section class="card player-card">
     <div class="card-header">
-      <div class="channel-head">
-        <img id="channel-logo" src="assets/logo2.png" alt="Canal">
-        <span class="name" id="channel-name">Canal en Vivo</span>
+      <div class="channel-head" id="channel-info">
+        <img id="channel-logo" src="assets/logo2.png" alt="Logo del canal">
+        <div class="channel-info">
+          <span class="name" id="channel-name">Canal en Vivo</span>
+          <span class="channel-status">
+            <span class="status-dot"></span>
+            En vivo
+          </span>
+        </div>
       </div>
     </div>
-    <iframe id="playerFrame" allowfullscreen referrerpolicy="no-referrer" title="Reproductor"></iframe>
+    <iframe 
+      id="playerFrame"
+      scrolling="no"
+      allowfullscreen 
+      referrerpolicy="no-referrer" 
+      allow="autoplay; fullscreen; encrypted-media; picture-in-picture; accelerometer; gyroscope"
+      title="Reproductor de transmisión en vivo"
+      loading="lazy">
+    </iframe>
   </section>
 
+  <!-- Chat Card -->
   <aside class="card chat-card">
     <div class="card-header">
       <span class="name">Chat en Vivo</span>
+      <button class="chat-toggle" id="chatToggle" aria-label="Minimizar chat">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M6 9l6 6 6-6"/>
+        </svg>
+      </button>
     </div>
-    <iframe id="twitchChat" src="" title="Twitch Chat" referrerpolicy="no-referrer"></iframe>
+    <iframe 
+      id="twitchChat" 
+      src="" 
+      title="Chat de Twitch" 
+      referrerpolicy="no-referrer"
+      loading="lazy">
+    </iframe>
   </aside>
 </main>
 
+<!-- Customization Panel -->
+<div class="customize-panel" id="customizePanel">
+  <div class="panel-header">
+    <h2>Personalización</h2>
+    <button class="close-panel" id="closePanel" aria-label="Cerrar panel">✕</button>
+  </div>
+
+  <div class="control-group">
+    <h3>🎨 Apariencia</h3>
+    
+    <div class="control-item">
+      <label for="accentColor">Color de acento</label>
+      <div class="color-picker-grid">
+        <button class="color-option active" data-color="#72d6ff" style="background: #72d6ff;" aria-label="Cyan"></button>
+        <button class="color-option" data-color="#ff7fff" style="background: #ff7fff;" aria-label="Magenta"></button>
+        <button class="color-option" data-color="#4ade80" style="background: #4ade80;" aria-label="Verde"></button>
+        <button class="color-option" data-color="#fbbf24" style="background: #fbbf24;" aria-label="Amarillo"></button>
+        <button class="color-option" data-color="#f87171" style="background: #f87171;" aria-label="Rojo"></button>
+        <button class="color-option" data-color="#a78bfa" style="background: #a78bfa;" aria-label="Púrpura"></button>
+        <button class="color-option" data-color="#fb923c" style="background: #fb923c;" aria-label="Naranja"></button>
+        <button class="color-option" data-color="#38bdf8" style="background: #38bdf8;" aria-label="Azul cielo"></button>
+      </div>
+    </div>
+
+    <div class="control-item">
+      <label>
+        Estrellas animadas
+        <label class="toggle-switch">
+          <input type="checkbox" id="starsToggle" checked>
+          <span class="toggle-slider"></span>
+        </label>
+      </label>
+    </div>
+
+    <div class="control-item">
+      <label for="starsIntensity">
+        Intensidad de estrellas
+        <span class="value-display" id="starsValue">70</span>
+      </label>
+      <input type="range" id="starsIntensity" min="20" max="120" value="70" step="10">
+    </div>
+
+    <div class="control-item">
+      <label for="bgOpacity">
+        Opacidad del fondo
+        <span class="value-display" id="opacityValue">70%</span>
+      </label>
+      <input type="range" id="bgOpacity" min="30" max="100" value="70" step="5">
+    </div>
+  </div>
+
+  <div class="control-group">
+    <h3>📺 Reproductor</h3>
+    
+    <div class="control-item">
+      <label>
+        Chat automático
+        <label class="toggle-switch">
+          <input type="checkbox" id="autoChatToggle" checked>
+          <span class="toggle-slider"></span>
+        </label>
+      </label>
+    </div>
+
+    <div class="control-item">
+      <label>
+        Recarga automática (si falla)
+        <label class="toggle-switch">
+          <input type="checkbox" id="autoReloadToggle">
+          <span class="toggle-slider"></span>
+        </label>
+      </label>
+    </div>
+  </div>
+
+  <div class="control-group">
+    <h3>⚙️ Configuración</h3>
+    <button class="btn" id="resetSettings" style="width: 100%;">
+      Restaurar valores por defecto
+    </button>
+  </div>
+</div>
+
+<!-- Footer -->
 <footer class="site-footer">
-  <small>© 2025 | <a href="dmca.html">DMCA</a></small>
-  <small><a href="https://x.com/AngulismoTV">Twitter</a> | <a href="https://discord.gg/jEayDA7T">Discord</a></small>
+  <small>© 2025 AngulismoTV | <a href="dmca.html">DMCA</a></small>
+  <small>
+    <a href="https://x.com/AngulismoTV">Twitter</a> | 
+    <a href="https://discord.gg/jEayDA7T">Discord</a>
+  </small>
 </footer>
 
-<script>
-const starfield=document.getElementById('starfield');
-for(let i=0;i<80;i++){
-  const star=document.createElement('div');
-  star.className='star';
-  const size=Math.random()*2+1;
-  star.style.width=star.style.height=size+'px';
-  star.style.top=Math.random()*100+'%';
-  star.style.left=Math.random()*100+'%';
-  star.style.animationDelay=Math.random()*3+'s';
-  starfield.appendChild(star);
-}
-</script>
+<!-- Scripts -->
 <script defer src="scripts/transmision.js"></script>
+<script defer src="scripts/transmision-ui.js"></script>
+
 </body>
 </html>
