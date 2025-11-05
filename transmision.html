@@ -9,6 +9,51 @@
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Press+Start+2P&display=swap" rel="stylesheet">
 <link rel="shortcut icon" href="assets/logo.png" type="image/x-icon">
 
+
+  <style>
+
+  /* Reproductor flexible que se adapta al contenido embebido */
+  .player-card {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+  
+  #playerFrame {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 16 / 9;
+    border: none;
+    background: #000;
+    flex: 1;
+    overflow: hidden !important;
+  }
+  
+  .player-card iframe {
+    min-height: 0 !important;
+    flex-grow: 1 !important;
+    overflow: hidden !important;
+  }
+  
+  @media (max-width: 768px) {
+    #playerFrame { min-height: 300px; }
+  }
+  
+  @media (max-width: 480px) {
+    #playerFrame { min-height: 250px; }
+  }
+
+  /* Loading state */
+  .loading { opacity: 0.5; pointer-events: none; }
+
+  /* Spin animation */
+  @keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+
+  .spinning { animation: spin 1s linear infinite; }
+</style>
 <style>
   /* === ESTILO RETRO GALÁCTICO === */
   :root {
@@ -269,3 +314,4 @@
 </script>
 </body>
 </html>
+
